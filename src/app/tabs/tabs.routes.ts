@@ -3,7 +3,7 @@ import { TabsPage } from './tabs.page';
 
 export const routes: Routes = [
   {
-    path: 'tabs',
+    path: '',
     component: TabsPage,
     children: [
       {
@@ -23,14 +23,15 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: 'tab1', // No leading slash inside children
         pathMatch: 'full',
       },
     ],
   },
+  // This handles the case where the user goes to just "/tabs"
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: 'tab1',
     pathMatch: 'full',
   },
 ];

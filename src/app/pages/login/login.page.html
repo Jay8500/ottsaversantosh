@@ -1,0 +1,45 @@
+<ion-content [fullscreen]="true">
+  <div class="login-container">
+    <div class="login-box">
+      <div class="ion-text-center ion-margin-bottom">
+        <h1>OttSaver</h1>
+        <p>Your media, everywhere.</p>
+      </div>
+
+      <ion-item lines="none" class="ion-margin-bottom custom-input">
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-input
+          type="email"
+          [(ngModel)]="credentials.email"
+          placeholder="Email Address"
+        >
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="ion-margin-bottom custom-input">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input
+          type="password"
+          [(ngModel)]="credentials.password"
+          placeholder="Password"
+        >
+        </ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        (click)="onLogin()"
+        shape="round"
+        class="login-button"
+      >
+        Sign In
+      </ion-button>
+      <!-- <ion-button expand="block" (click)="onSignup()" class="ion-margin-top">
+        Create Account
+      </ion-button> -->
+      <ion-button expand="block" fill="clear" (click)="goToSignIn()">
+        Don't have an account? Sign up
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

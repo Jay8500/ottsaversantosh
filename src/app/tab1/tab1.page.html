@@ -13,5 +13,13 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-item *ngIf="authService.user$ | async as user">
+    <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+    <ion-label>{{ user.email }}</ion-label>
+    <ion-button slot="end" fill="clear" color="danger" (click)="onLogout()">
+      <ion-icon name="log-out-outline"></ion-icon>
+    </ion-button>
+  </ion-item>
+
   <app-explore-container name="Tab 1 page"></app-explore-container>
 </ion-content>

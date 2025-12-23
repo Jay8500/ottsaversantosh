@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create Account</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="signup-container">
+    <ion-item lines="full">
+      <ion-input
+        label="Email"
+        labelPlacement="stacked"
+        type="email"
+        [(ngModel)]="credentials.email"
+        placeholder="your@email.com"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item lines="full" class="ion-margin-top">
+      <ion-input
+        label="Password"
+        labelPlacement="stacked"
+        type="password"
+        [(ngModel)]="credentials.password"
+        placeholder="********"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="onSignup()" class="ion-margin-top">
+      Create Account
+    </ion-button>
+  </div>
+</ion-content>
