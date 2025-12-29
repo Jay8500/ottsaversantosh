@@ -21,4 +21,12 @@ export const routes: Routes = [
     redirectTo: 'login', // Redirect empty path to login
     pathMatch: 'full',
   },
+  {
+    path: 'admin-dashboard',
+    loadComponent: () => import('./pages/admin-dashboard/admin-dashboard.page').then( m => m.AdminDashboardPage)
+  },
+  {
+    path: 'admin-add-product',
+    loadComponent: () => import('./pages/admin-add-product/admin-add-product.page').then( m => m.AdminAddProductPage)
+  },
 ];

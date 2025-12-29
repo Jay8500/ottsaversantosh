@@ -1,0 +1,79 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-button id="open-history">
+        <ion-icon name="time-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>OTT Admin Console</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button color="danger" (click)="handleLogout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="goToAddProduct()">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light">
+  <div class="header-banner">
+    <h1 class="ion-padding-horizontal">Subscription Manager</h1>
+    <p class="ion-padding-horizontal">Manage active Indian OTT rates</p>
+  </div>
+
+  <ion-list lines="none" class="ion-padding-top">
+    <ion-item-sliding *ngFor="let p of products$ | async">
+      <ion-item mode="ios" class="product-item">
+        <ion-thumbnail slot="start">
+          <img [src]="p.imageUrl || 'assets/placeholder-ott.png'" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <h2 class="product-name">{{ p.name }}</h2>
+          <p class="category-tag">{{ p.category }}</p>
+          <div class="price-row">
+            <span class="offer-price">{{ p.offerPrice }}</span>
+            <span class="actual-price">{{ p.actualPrice }}</span>
+          </div>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="confirmDelete(p)">
+          <ion-icon name="trash" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-modal
+    trigger="open-history"
+    [initialBreakpoint]="0.75"
+    [breakpoints]="[0, 0.75, 1]"
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Deletion History</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list lines="inset">
+          <ion-item *ngFor="let h of history$ | async">
+            <ion-thumbnail slot="start">
+              <img [src]="h.imageUrl" />
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ h.name }}</h2>
+              <p>Deleted on: {{ h.deletedAt?.toDate() | date:'medium' }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

@@ -1,0 +1,72 @@
+// Create a "Glass" effect for the cards
+.product-item {
+  --background: rgba(255, 255, 255, 0.9);
+  --border-radius: 20px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out;
+
+  &:active {
+    transform: scale(0.98); // Slight shrink when clicked
+  }
+}
+
+
+// Slanted Badge for Discount percentage
+.discount-badge {
+  background: #ff4961;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.price-tag {
+  font-weight: 800;
+  color: #2dd36f;
+  &::before {
+    content: '₹'; /* This adds the Rupee symbol automatically */
+    margin-right: 2px;
+  }
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px; // This creates the gap between Offer and MRP
+  margin-top: 4px;
+}
+
+.offer-price {
+  color: #1e1e1e;
+  font-weight: 800;
+  font-size: 1.2rem;
+  /* If you removed ₹ from HTML, keep this. If not, delete 'content' line below */
+  &::before {
+    content: '₹'; 
+    margin-right: 2px;
+    font-size: 0.9rem;
+  }
+}
+
+.actual-price {
+  text-decoration: line-through;
+  color: #92949c;
+  font-size: 0.9rem;
+  &::before {
+    content: '₹';
+  }
+}
+
+ion-thumbnail {
+  --size: 56px;
+  --border-radius: 12px;
+  background: #ffffff;
+  padding: 4px;
+  border: 1px solid #f0f0f0;
+  
+  img {
+    object-fit: contain; // Keeps the logo from stretching
+  }
+}

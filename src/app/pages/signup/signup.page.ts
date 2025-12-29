@@ -41,31 +41,43 @@ import { Firestore, doc, setDoc } from '@angular/fire/firestore'; // 1. Add thes
 export class SignupPage {
   private authService = inject(AuthService);
   private router = inject(Router);
-private firestore = inject(Firestore); // 2. Inject Firestore
-  credentials = { email: 'j@gmail.com', password: 'qwertyuiop',
-     name : "jay" };
+  private firestore = inject(Firestore); // 2. Inject Firestore
+  credentials = { email: 'j@gmail.com', password: 'qwertyuiop', name: 'jay' };
 
-async onSignup() {
-  try {
-    // Part 1: Create Auth User
-    const credential = await this.authService.register(this.credentials.email, this.credentials.password);
-    const uid = credential.user.uid;
-    console.log('Auth success! UID:', uid);
+  async onSignup() {
+    try {
+      // Part 1: Create Auth User via your AuthService
+      const credential = await this.authService.register(
+        this.credentials.email,
+        this.credentials.password
+      );
+      const uid = credential.user.uid;
 
-    // Part 2: Create Firestore Document
-    const userDocRef = doc(this.firestore, `users/${uid}`); // This creates the 'users' collection automatically
-    await setDoc(userDocRef, {
-      email: this.credentials.email,
-      uid: uid,
-      createdAt: new Date(),
-      name :this.credentials.name 
-    });
+      // Part 2: Determine Role
+      // If it's your friend's email, make them admin. Otherwise, customer.
+      const userRole =
+        this.credentials.email === 'admin@gmail.com' ? 'admin' : 'customer';
 
-    console.log('Firestore document created!');
-    this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
+      // Part 3: Create Firestore Document with Role
+      const userDocRef = doc(this.firestore, `users/${uid}`);
+      await setDoc(userDocRef, {
+        uid: uid,
+        email: this.credentials.email,
+        name: this.credentials.name,
+        role: userRole, // <--- THIS IS THE KEY ADDITION
+        createdAt: new Date(),
+      });
 
-  } catch (error) {
-    console.error('Error during signup process:', error);
+      console.log(`Firestore profile created with role: ${userRole}`);
+
+      // Part 4: Route based on role
+      if (userRole === 'admin') {
+        this.router.navigateByUrl('/admin-dashboard');
+      } else {
+        this.router.navigateByUrl('/tabs/tab1');
+      }
+    } catch (error) {
+      console.error('Error during signup process:', error);
+    }
   }
-} 
 }

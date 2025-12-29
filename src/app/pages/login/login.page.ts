@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore'; // 1. Add these
 import {
   IonContent,
   IonItem,
@@ -42,6 +43,7 @@ export class LoginPage {
   private router = inject(Router);
   private loadingCtrl = inject(LoadingController);
   private alertCtrl = inject(AlertController);
+  private firestore = inject(Firestore); // 2. Inject Firestore
 
   credentials = { email: '', password: '' };
 
@@ -54,23 +56,41 @@ export class LoginPage {
     await loading.present();
 
     try {
-      // 1. Wait for Firebase to finish
+      // Step 1: Login to Firebase Auth
       const result = await this.authService.login(
         this.credentials.email,
         this.credentials.password
       );
-      console.log('Login Successful:', result);
+      const uid = result.user.uid;
+
+      // Step 2: Fetch the Role from Firestore
+      const userDocRef = doc(this.firestore, `users/${uid}`);
+      const userSnap = await getDoc(userDocRef);
 
       await loading.dismiss();
 
-      // 2. Navigate immediately after success
-      // Using navigateByUrl is often more reliable for the first hop
-      this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const role = userData['role'];
+
+        console.log('User Role found:', role);
+
+        // Step 3: Redirect based on Role
+        if (role === 'admin') {
+          // Send your friend to the Admin Dashboard
+          this.router.navigateByUrl('/admin-dashboard', { replaceUrl: true });
+        } else {
+          // Send customers to the regular app
+          this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
+        }
+      } else {
+        // Fallback if no Firestore doc exists yet
+        this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
+      }
     } catch (e: any) {
       await loading.dismiss();
-      console.error('Login Error:', e);
       const alert = await this.alertCtrl.create({
-        header: 'Error',
+        header: 'Login Failed',
         message: e.message,
         buttons: ['OK'],
       });
@@ -91,7 +111,7 @@ export class LoginPage {
     }
   }
 
-  goToSignIn(){
-      this.router.navigateByUrl('/signup', { replaceUrl: true });
+  goToSignIn() {
+    this.router.navigateByUrl('/signup', { replaceUrl: true });
   }
 }

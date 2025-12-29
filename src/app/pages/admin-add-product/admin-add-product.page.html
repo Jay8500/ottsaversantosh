@@ -1,0 +1,75 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin-dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Subscription</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="form-container">
+    <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+      <ion-label position="floating">Service Name (e.g. Netflix)</ion-label>
+      <ion-input [(ngModel)]="product.name" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+      <ion-label position="floating">PNG Image URL</ion-label>
+      <ion-input
+        [(ngModel)]="product.imageUrl"
+        type="url"
+        placeholder="https://..."
+      ></ion-input>
+      <!-- <div class="image-preview" *ngIf="product.imageUrl">
+        <img [src]="product.imageUrl" />
+        <p>Selected PNG</p>
+      </div>
+
+      <input
+        type="file"
+        #fileInput
+        (change)="uploadImage($event)"
+        accept="image/png, image/jpeg, image/jpg"
+        style="display: none"
+      />
+
+      <ion-button
+        expand="block"
+        fill="outline"
+        color="medium"
+        (click)="fileInput.click()"
+      >
+        <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+        {{ product.imageUrl ? 'Change Image' : 'Upload PNG/JPG' }}
+      </ion-button> -->
+    </ion-item>
+
+    <ion-row>
+      <ion-col>
+        <ion-item fill="outline" mode="md">
+          <ion-label position="floating">Actual ₹</ion-label>
+          <ion-input
+            [(ngModel)]="product.actualPrice"
+            type="number"
+          ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item fill="outline" mode="md">
+          <ion-label position="floating">Offer ₹</ion-label>
+          <ion-input [(ngModel)]="product.offerPrice" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-button
+      expand="block"
+      color="success"
+      class="ion-margin-top"
+      (click)="saveProduct()"
+    >
+      Publish Subscription
+    </ion-button>
+  </div>
+</ion-content>
