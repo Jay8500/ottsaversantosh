@@ -1,25 +1,99 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="ion-no-border" color="light">
+    <ion-title>OTT Money Saver</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-item *ngIf="authService.user$ | async as user">
-    <ion-icon name="person-circle-outline" slot="start"></ion-icon>
-    <ion-label>{{ user.email }}</ion-label>
-    <ion-button slot="end" fill="clear" color="danger" (click)="onLogout()">
-      <ion-icon name="log-out-outline"></ion-icon>
+<ion-content class="ion-padding" color="light">
+  @if (isLoading) {
+  <!-- same skeleton block as above -->
+  @for (i of [0,1,2]; track i) {
+  <!-- repeat as many skeletons as you want -->
+  <ion-card button="true">
+    <ion-skeleton-text
+      [animated]="true"
+      style="height: 200px"
+    ></ion-skeleton-text>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-skeleton-text
+          [animated]="true"
+          style="width: 70%"
+        ></ion-skeleton-text>
+      </ion-card-title>
+      <ion-card-subtitle>
+        <ion-skeleton-text
+          [animated]="true"
+          style="width: 50%"
+        ></ion-skeleton-text>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-skeleton-text
+        [animated]="true"
+        style="width: 100%"
+      ></ion-skeleton-text>
+    </ion-card-content>
+    <ion-button fill="clear" disabled>
+      <ion-skeleton-text
+        [animated]="true"
+        style="width: 80px"
+      ></ion-skeleton-text>
     </ion-button>
-  </ion-item>
+  </ion-card>
+  } } @else {
+  <!-- ==== Cards when data exists ==== -->
+  @for (attInfo of ottAdvInfo; track attInfo.id) {
+  <ion-card button="true">
+    <img alt="Silhouette of mountains" [src]="attInfo.img" width="100%" />
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <ion-card-header>
+      <ion-card-title>{{ attInfo.title }}</ion-card-title>
+      <ion-card-subtitle>{{ attInfo.subTitle }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>{{ attInfo.content }}</ion-card-content>
+
+    <ion-button fill="clear" (click)="onEnquiryClick(attInfo)">
+      Enquiry
+    </ion-button>
+  </ion-card>
+  }
+
+  <!-- ==== Skeleton when the array is empty or still loading ==== -->
+  @empty { @for (i of [0,1,2]; track i) {
+  <!-- repeat as many skeletons as you want -->
+  <ion-card button="true">
+    <ion-skeleton-text
+      [animated]="true"
+      style="height: 200px"
+    ></ion-skeleton-text>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-skeleton-text
+          [animated]="true"
+          style="width: 70%"
+        ></ion-skeleton-text>
+      </ion-card-title>
+      <ion-card-subtitle>
+        <ion-skeleton-text
+          [animated]="true"
+          style="width: 50%"
+        ></ion-skeleton-text>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-skeleton-text
+        [animated]="true"
+        style="width: 100%"
+      ></ion-skeleton-text>
+    </ion-card-content>
+    <ion-button fill="clear" disabled>
+      <ion-skeleton-text
+        [animated]="true"
+        style="width: 80px"
+      ></ion-skeleton-text>
+    </ion-button>
+  </ion-card>
+  } } }
 </ion-content>

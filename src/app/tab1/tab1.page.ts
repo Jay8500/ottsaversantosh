@@ -1,98 +1,125 @@
-import { Component, inject } from '@angular/core';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; // For logout navigation
-import { AuthService } from '../services/auth'; // Adjust path as needed
-
+import { Component, OnInit } from '@angular/core';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonIcon,
   IonButton,
   IonButtons,
   IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardSubtitle,
   IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonSkeletonText,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import {
-  cartOutline,
-  trashOutline,
-  cardOutline,
-  personCircleOutline,
-  logOutOutline,
-} from 'ionicons/icons';
+// import { lastValueFrom } from 'rxjs';                  // <-- for async/await
+// import { HttpClient } from '@angular/common/http';
+interface OttInfo {
+  id?: number;
+  img: string;
+  title: string;
+  subTitle: string;
+  content: string;
+}
+// import { person } from 'ionicons/icons';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    // IonButtons,
+    IonButton,
+    // IonIcon,
+    IonCard,
+    IonSkeletonText,
+    IonCardHeader,
+    IonCardContent,
+    IonCardTitle,
+    IonCardSubtitle,
+  ],
   styleUrls: ['tab1.page.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    ExploreContainerComponent,
-    // IonList,
-    IonItem,
-    IonLabel,
-    IonIcon,
-    IonButton,
-    // IonButtons,
-    // IonCard,
-    // IonCardHeader,
-    // IonCardTitle,
-    // IonCardSubtitle,
-    // IonCardContent
-  ],
 })
-export class Tab1Page {
-  // 1. Inject services
-  public authService = inject(AuthService);
-  private router = inject(Router);
-
-  isLoading = false;
-  ottAdvInfo = [
-    {
-      id: 1,
-      title: 'Netflix Bundle',
-      subTitle: 'Save 20%',
-      content: 'Premium 4K plan with friends.',
-    },
-    {
-      id: 2,
-      title: 'Disney+ Trio',
-      subTitle: 'Hot Deal',
-      content: 'Includes Hulu and ESPN.',
-    },
-  ];
-
+export class Tab1Page implements OnInit {
+  public ottAdvInfo: OttInfo[] = [];
+  public isLoading = true;
   constructor() {
-    // 2. Add icons to the registry
-    addIcons({
-      cartOutline,
-      trashOutline,
-      cardOutline,
-      personCircleOutline,
-      logOutOutline,
-    });
+    // addIcons({ person });
+  } //private http: HttpClient
+
+  async ngOnInit() {
+    await this.getOttAdvInfo();
   }
 
-  // 3. Add Logout method
-  async onLogout() {
-    await this.authService.logout();
-    this.router.navigateByUrl('/login', { replaceUrl: true });
+  async getOttAdvInfo() {
+    this.isLoading = true; // show skeletons
+    this.ottAdvInfo = [];
+    try {
+      // // ---->  YOUR API ENDPOINT HERE  <----
+      // const url = 'https://your-api.example.com/ott-plans';
+
+      // // `lastValueFrom` turns Observable → Promise (so we can `await`)
+      // const data = await lastValueFrom(this.http.get<OttInfo[]>(url));
+
+      // this.ottAdvInfo = data;
+      await new Promise((res) => setTimeout(res, 1000));
+      this.ottAdvInfo.push(
+        {
+          id: 1,
+          img: 'assets/ottimgs/netlfix.jpg',
+          title: 'NETFLIX Premium 4k',
+          subTitle: '1 Month',
+          content: 'Get Premium account now for 139 Rupees.',
+        },
+        {
+          id: 2,
+          img: 'assets/ottimgs/prime.avif',
+          title: 'Amazon Prime Video',
+          subTitle: '1 month',
+          content: 'Get Premium account now for 139 Rupees.',
+        },
+        {
+          id: 3,
+          img: 'assets/ottimgs/zee5.png',
+          title: 'Zee 5',
+          subTitle: '1 Month',
+          content: 'Get Premium account now for 139 Rupees.',
+        },
+        {
+          id: 4,
+          img: 'assets/ottimgs/yt.jpg',
+          title: 'Youtube',
+          subTitle: '1 Month',
+          content: 'Get Premium account now for 139 Rupees.',
+        },
+        {
+          id: 5,
+          img: 'assets/ottimgs/hotstar.png',
+          title: 'Hot Star',
+          subTitle: '1 Month',
+          content: 'Get Premium account now for 139 Rupees.',
+        },
+        {
+          img: 'assets/ottimgs/aha.jpg',
+          title: 'aha',
+          subTitle: '1 Month',
+          content: 'Get Premium account now for 139 Rupees.',
+        }
+      );
+      this.isLoading = false; // hide skeletons
+    } catch (err) {
+      console.error('Failed to load OTT plans', err);
+    } finally {
+      this.isLoading = false; // hide skeletons
+    }
   }
 
-  onEnquiryClick(info: any) {
-    console.log('Clicked enquiry for:', info.title);
-  }
+  onEnquiryClick(attInfo: any) {}
 }

@@ -22,6 +22,11 @@ export const routes: Routes = [
           import('../tab3/tab3.page').then((m) => m.Tab3Page),
       },
       {
+        path: 'profile',
+        loadComponent: () =>
+          import('../pages/profile/profile.page').then((m) => m.ProfilePage),
+      },
+      {
         path: '',
         redirectTo: 'tab1', // No leading slash inside children
         pathMatch: 'full',

@@ -21,9 +21,4 @@ export const routes: Routes = [
     redirectTo: 'login', // Redirect empty path to login
     pathMatch: 'full',
   },
-  {
-    path: 'signup',
-    loadComponent: () =>
-      import('./pages/signup/signup.page').then((m) => m.SignupPage),
-  },
 ];
