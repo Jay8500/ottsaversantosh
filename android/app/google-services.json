@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "237565228822",
+    "project_id": "testottsaver",
+    "storage_bucket": "testottsaver.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237565228822:android:5f439affdc8877ee3d0237",
+        "android_client_info": {
+          "package_name": "com.ottsaver.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgbEDKS9odnp1GhuHv4JZJC6XeCDqVhCc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
