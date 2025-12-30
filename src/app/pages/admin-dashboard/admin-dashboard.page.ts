@@ -1,13 +1,18 @@
-import { Component, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  inject,
+  EnvironmentInjector,
+  runInInjectionContext,
+} from '@angular/core';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { IonicModule, AlertController } from '@ionic/angular';
-import { 
-  Firestore, 
-  collection, 
-  collectionData, 
-  deleteDoc, 
-  doc, 
-  addDoc 
+import {
+  Firestore,
+  collection,
+  collectionData,
+  deleteDoc,
+  doc,
+  addDoc,
 } from '@angular/fire/firestore';
 import { Auth, authState, signOut } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -17,13 +22,49 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 // Icon Imports
 import { addIcons } from 'ionicons';
 import { addOutline, logOutOutline, timeOutline, trash } from 'ionicons/icons';
-
+import {
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
+  IonThumbnail,
+  IonIcon,
+  IonLabel,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonList,
+  IonItem,
+  IonButton,
+  IonButtons,
+  IonNote,
+  IonModal,
+} from '@ionic/angular/standalone';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
   templateUrl: './admin-dashboard.page.html',
   styleUrls: ['./admin-dashboard.page.scss'],
-  imports: [IonicModule, CommonModule],
+  imports: [
+    CommonModule,
+    AsyncPipe,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonList,
+    IonItem,
+    IonItemSliding,
+    IonItemOptions,
+    IonItemOption,
+    IonThumbnail,
+    IonIcon,
+    IonLabel,
+    IonButton,
+    IonButtons,
+    IonNote,
+    IonModal,
+  ],
 })
 export class AdminDashboardPage {
   private firestore = inject(Firestore);
@@ -72,9 +113,7 @@ export class AdminDashboardPage {
         if (!user) return of(0);
         return runInInjectionContext(this.injector, () => {
           const ref = collection(this.firestore, 'users');
-          return collectionData(ref).pipe(
-            map((users) => users.length)
-          );
+          return collectionData(ref).pipe(map((users) => users.length));
         });
       }),
       catchError(() => of(0))

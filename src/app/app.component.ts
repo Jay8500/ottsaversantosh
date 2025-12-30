@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
           try {
             await SplashScreen.hide();
           } catch (e) {
-            console.log('Splash hidden');
+            // console.log('Splash hidden');
           }
         });
     });

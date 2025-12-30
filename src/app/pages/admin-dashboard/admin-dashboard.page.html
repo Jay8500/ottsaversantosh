@@ -2,7 +2,7 @@
   <ion-toolbar color="dark">
     <ion-buttons slot="start">
       <ion-button id="open-history">
-        <ion-icon name="time-outline" slot="icon-only"></ion-icon>
+        <ion-icon slot="icon-only" name="time-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -20,22 +20,34 @@
 </ion-header>
 
 <ion-content color="light">
-  <div class="header-banner">
-    <h1 class="ion-padding-horizontal">Subscription Manager</h1>
-    <p class="ion-padding-horizontal">Manage active Indian OTT rates</p>
-      <p>Total Users: {{ userCount$ | async }}</p>
+  <div class="ion-padding">
+    <h2>Subscription Manager</h2>
+    <p>Manage active Indian OTT rates</p>
+    <ion-note>Total Users: {{ userCount$ | async }}</ion-note>
   </div>
-
-  <ion-list lines="none" class="ion-padding-top">
-    <ion-item-sliding *ngFor="let p of products$ | async">
-      <ion-item mode="ios" class="product-item">
+  <ion-list lines="none" class="ion-no-padding">
+    @for (p of (products$ | async); track p.id) {
+    <ion-item-sliding>
+      <ion-item class="product-item">
         <ion-thumbnail slot="start">
-          <img [src]="p.imageUrl || 'assets/placeholder-ott.png'" />
+          <img [src]="p.imageUrl || 'assets/placeholder.jpg'" />
         </ion-thumbnail>
 
         <ion-label>
-          <h2 class="product-name">{{ p.name }}</h2>
-          <p class="category-tag">{{ p.category }}</p>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <h2 style="font-weight: 700">{{ p.name }}</h2>
+
+            @if (p.discount) {
+            <span class="discount-badge">{{ p.discount }}% OFF</span>
+            }
+          </div>
+
           <div class="price-row">
             <span class="offer-price">{{ p.offerPrice }}</span>
             <span class="actual-price">{{ p.actualPrice }}</span>
@@ -44,35 +56,47 @@
       </ion-item>
 
       <ion-item-options side="end">
-        <ion-item-option color="danger" expandable  (click)="confirmDelete(p)">
+        <ion-item-option color="danger" (click)="confirmDelete(p)">
           <ion-icon name="trash" slot="icon-only"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
+    } @empty {
+    <div class="ion-padding ion-text-center">
+      <p>No active subscriptions found.</p>
+    </div>
+    }
   </ion-list>
-
   <ion-modal
     trigger="open-history"
-    [initialBreakpoint]="0.75"
-    [breakpoints]="[0, 0.75, 1]"
+    [initialBreakpoint]="0.5"
+    [breakpoints]="[0, 0.5, 0.8]"
   >
     <ng-template>
       <ion-header>
-        <ion-toolbar>
-          <ion-title>Deletion History</ion-title>
+        <ion-toolbar color="light">
+          <ion-title>Deleted History</ion-title>
         </ion-toolbar>
       </ion-header>
+
       <ion-content class="ion-padding">
-        <ion-list lines="inset">
-          <ion-item *ngFor="let h of history$ | async">
+        <ion-list lines="full">
+          @for (item of (history$ | async); track item.id) {
+          <ion-item>
             <ion-thumbnail slot="start">
-              <img [src]="h.imageUrl" />
+              <img [src]="item.imageUrl || 'assets/placeholder.png'" />
             </ion-thumbnail>
             <ion-label>
-              <h2>{{ h.name }}</h2>
-              <p>Deleted on: {{ h.deletedAt?.toDate() | date:'medium' }}</p>
+              <h2>{{ item.name }}</h2>
+              <p>Removed on: {{ item.deletedAt?.toDate() | date:'short' }}</p>
             </ion-label>
+            <ion-note slot="end" color="danger">Deleted</ion-note>
           </ion-item>
+          } @empty {
+          <div class="ion-padding ion-text-center">
+            <p>No history available.</p>
+          </div>
+          }
         </ion-list>
       </ion-content>
     </ng-template>
