@@ -20,7 +20,10 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore'; // ADD
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    provideIonicAngular({
+      scrollAssist: false,  // Stops the "jumping" behavior
+      scrollPadding: false  // Stops the extra white space at the bottom
+    }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     // Setup Firebase
     provideFirebaseApp(() => initializeApp(environment.firebase)),

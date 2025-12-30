@@ -70,3 +70,16 @@ ion-thumbnail {
     object-fit: contain; // Keeps the logo from stretching
   }
 }
+
+ion-item-sliding {
+  /* Prevents the mobile browser from intercepting the horizontal swipe */
+  touch-action: pan-y !important; 
+  
+  /* Ensures the sliding buttons are visible behind the item */
+  overflow: visible; 
+}
+
+.product-item {
+  /* Increases the 'tap' area for better response on mobile hardware */
+  --min-height: 80px;
+}

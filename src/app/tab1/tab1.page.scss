@@ -1,8 +1,15 @@
 .ott-card {
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   margin-bottom: 20px;
   overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  // Makes the card feel "clickable"
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 
   .img-container {
     background: #f8f9fa;
@@ -11,18 +18,46 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    border-bottom: 1px solid #f0f0f0; // Subtle separator
 
     img {
       max-height: 100%;
       object-fit: contain;
+      // Adds a slight drop shadow to logos like Netflix/Amazon to make them pop
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); 
     }
+  }
+
+  ion-card-header {
+    padding-bottom: 8px;
+    
+    ion-card-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #1a1a1a;
+    }
+  }
+
+  ion-card-content {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  ion-button {
+    margin: 12px; // Gives the button some breathing room
+    --border-radius: 12px;
+    font-weight: 600;
   }
 }
 
 .price-box {
+  display: flex;
+  align-items: baseline; // Aligns the ₹ signs nicely
   margin-top: 8px;
+
   .offer {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #2dd36f;
   }
@@ -30,6 +65,67 @@
     text-decoration: line-through;
     color: #92949c;
     margin-left: 10px;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
+}
+
+ion-title {
+  padding-inline: 0; // Allows the text to align better with the left edge
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  
+  .greeting-row {
+    font-size: 0.75rem;     // Small and elegant
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;           // Slightly faded so brand stands out
+    margin-bottom: -2px;    // Pulls the brand name closer
+  }
+
+  .brand-row {
+    font-size: 1.25rem;     // Big and Bold
+    font-weight: 800;       // Extra bold for brand memory
+    letter-spacing: -0.5px; // Modern look
+    color: #ffffff;         // Assuming your primary color is blue/dark
+  }
+}
+
+ion-toolbar {
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --padding-start: 16px;
+  --padding-end: 8px;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  .greeting-row {
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    opacity: 0.8;
+    margin-bottom: 2px;
+  }
+
+  .brand-row {
+    font-size: 1.3rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+}
+
+// Align the profile button perfectly with the two-line text
+ion-buttons[slot="end"] {
+  align-self: center;
+  margin-top: 4px; // Adjust this small value to eye-ball the center
 }

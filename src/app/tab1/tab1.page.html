@@ -1,50 +1,69 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="primary">
-    <ion-title>OTT Money Saver</ion-title>
+    <ion-title>
+      <div class="header-container">
+        <span class="greeting">Hello, {{ userData?.name || 'User' }}!</span>
+        <div class="brand-row">OTT Money Saver</div>
+      </div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button routerLink="/tabs/profile">
+        <ion-icon
+          name="person-circle-outline"
+          style="font-size: 1.8rem"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content class="ion-padding" color="light">
-  
-  @if (isLoading) {
-    @for (i of [1,2,3]; track i) {
-      <ion-card mode="ios">
-        <ion-skeleton-text animated style="height: 180px"></ion-skeleton-text>
-        <ion-card-header>
-          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-        </ion-card-header>
-      </ion-card>
-    }
-  } 
+  @if (isLoading) { @for (i of [1,2,3]; track i) {
+  <ion-card mode="ios" class="ott-card">
+    <div style="padding: 20px">
+      <ion-skeleton-text
+        animated
+        style="height: 120px; border-radius: 12px"
+      ></ion-skeleton-text>
+    </div>
+    <ion-card-header>
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    </ion-card-header>
+  </ion-card>
+  } } @for (product of (products$ | async); track product.id) {
+  <ion-card mode="ios" class="ott-card">
+    <div class="img-container">
+      <img [src]="product.imageUrl" alt="OTT Logo" />
+    </div>
 
-  @else {
-    @for (product of (products$ | async); track product.id) {
-      <ion-card mode="ios" class="ott-card">
-        <div class="img-container">
-          <img [src]="product.imageUrl" alt="OTT Logo" />
-        </div>
-
-        <ion-card-header>
-          <ion-card-title>{{ product.name }}</ion-card-title>
-          <div class="price-box">
-             <span class="offer">₹{{ product.offerPrice }}</span>
-             <span class="mrp">₹{{ product.actualPrice }}</span>
-          </div>
-        </ion-card-header>
-
-        <ion-card-content>
-          Enjoy {{ product.name }} Premium at the best price in India!
-        </ion-card-content>
-
-        <ion-button fill="solid" expand="block" color="success" (click)="onEnquiryClick(product)">
-          <ion-icon name="logo-whatsapp" slot="start"></ion-icon>
-          Buy via WhatsApp
-        </ion-button>
-      </ion-card>
-    } @empty {
-      <div class="ion-text-center ion-padding">
-        <p>No active deals right now. Check back soon!</p>
+    <ion-card-header>
+      <ion-card-title>{{ product.name }}</ion-card-title>
+      <div class="price-box">
+        <span class="offer">₹{{ product.offerPrice }}</span>
+        <span class="mrp">₹{{ product.actualPrice }}</span>
+        <ion-badge color="danger" mode="ios" style="margin-left: auto">
+          Save ₹{{ product.actualPrice - product.offerPrice }}
+        </ion-badge>
       </div>
-    }
-  }
+    </ion-card-header>
+
+    <ion-card-content>
+      Enjoy {{ product.name }} Premium at the best price in India!
+    </ion-card-content>
+
+    <ion-button
+      fill="solid"
+      expand="block"
+      color="success"
+      (click)="onEnquiryClick(product)"
+    >
+      <ion-icon name="logo-whatsapp" slot="start"></ion-icon>
+      Buy via WhatsApp
+    </ion-button>
+  </ion-card>
+  } @empty { @if (!isLoading) {
+  <div class="ion-text-center ion-padding">
+    <p>No active deals right now. Check back soon!</p>
+  </div>
+  } }
 </ion-content>

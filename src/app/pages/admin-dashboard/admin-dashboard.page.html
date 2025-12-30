@@ -23,6 +23,7 @@
   <div class="header-banner">
     <h1 class="ion-padding-horizontal">Subscription Manager</h1>
     <p class="ion-padding-horizontal">Manage active Indian OTT rates</p>
+      <p>Total Users: {{ userCount$ | async }}</p>
   </div>
 
   <ion-list lines="none" class="ion-padding-top">
@@ -43,7 +44,7 @@
       </ion-item>
 
       <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="confirmDelete(p)">
+        <ion-item-option color="danger" expandable  (click)="confirmDelete(p)">
           <ion-icon name="trash" slot="icon-only"></ion-icon>
         </ion-item-option>
       </ion-item-options>

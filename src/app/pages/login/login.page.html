@@ -1,9 +1,16 @@
-<ion-content [fullscreen]="true" scroll-y="false" class="ion-no-padding">
+<ion-content [fullscreen]="true" scroll-y="true" class="ion-no-padding">
   <div class="login-container">
     <div class="login-box">
       <div class="ion-text-center ion-margin-bottom">
+        <div class="logo-container">
+          <img
+            src="assets/ottimgs/ottmoneysaver.jpg"
+            alt="OttSaver Brand"
+            class="brand-logo"
+          />
+        </div>
         <h1>OttSaver</h1>
-        <p>Your media, everywhere.</p>
+        <p>Your budget friendly OTT Hub!</p>
       </div>
 
       <ion-item lines="none" class="ion-margin-bottom custom-input">
@@ -19,11 +26,14 @@
       <ion-item lines="none" class="ion-margin-bottom custom-input">
         <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
         <ion-input
-          type="password"
+          [type]="passwordType"
           [(ngModel)]="credentials.password"
           placeholder="Password"
         >
         </ion-input>
+        <ion-button fill="clear" slot="end" (click)="togglePassword()">
+          <ion-icon [name]="passwordIcon" color="medium"></ion-icon>
+        </ion-button>
       </ion-item>
 
       <ion-button
@@ -34,12 +44,12 @@
       >
         Sign In
       </ion-button>
-      <!-- <ion-button expand="block" (click)="onSignup()" class="ion-margin-top">
-        Create Account
-      </ion-button> -->
-      <ion-button expand="block" fill="clear" (click)="goToSignIn()">
-        Don't have an account? Sign up
-      </ion-button>
+
+      <div class="ion-text-center ion-margin-top">
+        <p (click)="goToSignIn()" class="signup-text">
+          Don't have an account? <span>Sign up</span>
+        </p>
+      </div>
     </div>
   </div>
 </ion-content>

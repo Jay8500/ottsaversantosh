@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -12,15 +13,24 @@ import {
   IonHeader,
   IonIcon,
   IonSkeletonText,
+  IonBadge,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  query,
+  getDocs,
+} from '@angular/fire/firestore';
 import { Observable, tap } from 'rxjs';
 import { addIcons } from 'ionicons';
-import { logoWhatsapp } from 'ionicons/icons';
+import { logoWhatsapp, personCircleOutline } from 'ionicons/icons';
 // import { lastValueFrom } from 'rxjs';                  // <-- for async/await
 // import { HttpClient } from '@angular/common/http';
+import { Auth, authState } from '@angular/fire/auth'; // Add Auth to imports
+import { doc, getDoc } from 'firebase/firestore';
 interface OttInfo {
   id?: number;
   img: string;
@@ -37,67 +47,86 @@ interface OttInfo {
     IonHeader,
     IonTitle,
     IonToolbar,
-    // IonButtons,
+    RouterModule,
     IonButton,
     IonIcon,
     IonCard,
     IonSkeletonText,
     IonCardHeader,
     IonCardContent,
+    IonBadge,
     IonCardTitle,
+    IonButton,
+    IonButtons,
     // IonCardSubtitle,
     CommonModule,
   ],
   styleUrls: ['tab1.page.scss'],
   standalone: true,
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page {
+  private auth = inject(Auth);
   private firestore = inject(Firestore);
   public ottAdvInfo: OttInfo[] = [];
   public isLoading = true;
   // Use an Observable for real-time data
-  public products$: Observable<any[]> | undefined;
+  public products$: Observable<any[]>;
+  public userName: string = 'Guest'; // Default value
   constructor() {
-    addIcons({ logoWhatsapp });
+    addIcons({ logoWhatsapp, personCircleOutline });
+    this.loadUserProfile();
+    const productRef = collection(this.firestore, 'products');
+
+    // We create the observable directly
+    this.products$ = collectionData(productRef, { idField: 'id' }).pipe(
+      tap((data) => {
+        if (data && data.length > 0) {
+          this.isLoading = false; // This kills the skeletons
+          // console.log('UI updated with items:', data.length);
+        }
+      })
+    );
+
+    // Keep this small logic to handle the "Empty" case quickly
+    getDocs(productRef).then((snap) => {
+      if (snap.empty) {
+        this.isLoading = false;
+      }
+    });
   }
-  async ngOnInit() {
-    await this.getOttAdvInfo();
-  }
+  userData: any = null; //
+  async loadUserProfile() {
+    const user = this.auth.currentUser;
+    if (user) {
+      const userDocRef = doc(this.firestore, `users/${user.uid}`);
+      const userSnap = await getDoc(userDocRef);
 
-  async getOttAdvInfo() {
-    this.isLoading = true; // show skeletons
-    this.ottAdvInfo = [];
-    try {
-      const productRef = collection(this.firestore, 'products');
-
-      // collectionData automatically updates when Firestore changes
-      this.products$ = collectionData(productRef, { idField: 'id' }).pipe(
-        tap(() => {
-          this.isLoading = false; // Turn off skeletons once data arrives
-        })
-      );
-
-      this.isLoading = false; // hide skeletons
-    } catch (err) {
-      // console.error('Failed to load OTT plans', err);
-    } finally {
-      this.isLoading = false; // hide skeletons
+      if (userSnap.exists()) {
+        this.userData = userSnap.data();
+      } else {
+        // Fallback if Firestore doc is missing
+        this.userData = {
+          name: 'OttSaver User',
+          email: user.email,
+          role: 'customer',
+        };
+      }
     }
   }
-
   onEnquiryClick(product: any) {
     // You can link this to WhatsApp later
-    // console.log('Enquiring about:', product.name);
+    //
+    // .log('Enquiring about:', product.name);
     const phoneNumber = '917780199188'; // Replace with your friend's WhatsApp number (with 91)
-    const message = `Hi, I am interested in buying the ${product.name} subscription for ₹${product.offerPrice}. Please guide me on how to pay.`;
+    const message =
+      `*New Inquiry from OttSaver* 🚀\n\n` +
+      `Plan: *${product.name}*\n` +
+      `Offer Price: ₹${product.offerPrice}\n` +
+      `Actual Price: ₹${product.actualPrice}\n\n` +
+      `Please send me the payment details!`;
 
-    // Encode the message for a URL
     const encodedMessage = encodeURIComponent(message);
-
-    // Create the WhatsApp link
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-    // Open the link in a new window/app
     window.open(whatsappUrl, '_system');
   }
 }

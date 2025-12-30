@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -12,12 +12,23 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonSkeletonText,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 // 1. Add personCircleOutline to this import list
-import { calendarOutline, settingsOutline, timeOutline } from 'ionicons/icons';
+import {
+  calendarOutline,
+  logOutOutline,
+  settingsOutline,
+  shieldCheckmarkOutline,
+  timeOutline,
+} from 'ionicons/icons';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
+import { Preferences } from '@capacitor/preferences';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
@@ -30,18 +41,56 @@ import { calendarOutline, settingsOutline, timeOutline } from 'ionicons/icons';
     IonToolbar,
     CommonModule,
     FormsModule,
-    IonCard,
-    IonCardHeader,
+    // IonCard,
+    // IonCardHeader,
+    IonSkeletonText,
     IonList,
     IonLabel,
     IonIcon,
     IonItem,
-    IonCardTitle,
+    // IonCardTitle,
   ],
 })
 export class ProfilePage implements OnInit {
+  private firestore = inject(Firestore);
+  private auth = inject(Auth);
+  private router = inject(Router);
+  userData: any = null; // This will hold the name, email, and role
   constructor() {
-    addIcons({ settingsOutline,calendarOutline,timeOutline });
+    addIcons({
+      settingsOutline,
+      calendarOutline,
+      timeOutline,
+      shieldCheckmarkOutline,
+      logOutOutline,
+    });
   }
-  ngOnInit() {}
+
+  async ngOnInit() {
+    await this.loadUserProfile();
+  }
+
+  async loadUserProfile() {
+    const user = this.auth.currentUser;
+    if (user) {
+      const userDocRef = doc(this.firestore, `users/${user.uid}`);
+      const userSnap = await getDoc(userDocRef);
+
+      if (userSnap.exists()) {
+        this.userData = userSnap.data();
+      } else {
+        // Fallback if Firestore doc is missing
+        this.userData = {
+          name: 'OttSaver User',
+          email: user.email,
+          role: 'customer',
+        };
+      }
+    }
+  }
+  async logout() {
+    await this.auth.signOut();
+    await Preferences.clear();
+    this.router.navigateByUrl('/login', { replaceUrl: true });
+  }
 }

@@ -1,36 +1,66 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/login"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Create Account</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" scroll-y="true">
+  <div class="login-container">
+    <div class="login-box">
+      <div class="ion-text-center ion-margin-bottom">
+        <div class="logo-container">
+          <img
+            src="assets/ottimgs/ottmoneysaver.jpg"
+            class="brand-logo"
+            alt="Logo"
+          />
+        </div>
+        <h1 class="brand-title">Create Account</h1>
+        <p class="brand-subtitle">Join OttSaver today</p>
+      </div>
 
-<ion-content class="ion-padding">
-  <div class="signup-container">
-    <ion-item lines="full">
-      <ion-input
-        label="Email"
-        labelPlacement="stacked"
-        type="email"
-        [(ngModel)]="credentials.email"
-        placeholder="your@email.com"
-      ></ion-input>
-    </ion-item>
+      <ion-item lines="none" class="ion-margin-bottom custom-input">
+        <ion-icon name="person-outline" slot="start" color="medium"></ion-icon>
+        <ion-input
+          type="text"
+          [(ngModel)]="credentials.name"
+          placeholder="Full Name"
+        >
+        </ion-input>
+      </ion-item>
 
-    <ion-item lines="full" class="ion-margin-top">
-      <ion-input
-        label="Password"
-        labelPlacement="stacked"
-        type="password"
-        [(ngModel)]="credentials.password"
-        placeholder="********"
-      ></ion-input>
-    </ion-item>
+      <ion-item lines="none" class="ion-margin-bottom custom-input">
+        <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+        <ion-input
+          type="email"
+          [(ngModel)]="credentials.email"
+          placeholder="Email Address"
+        >
+        </ion-input>
+      </ion-item>
 
-    <ion-button expand="block" (click)="onSignup()" class="ion-margin-top">
-      Create Account
-    </ion-button>
+      <ion-item lines="none" class="ion-margin-bottom custom-input">
+        <ion-icon
+          name="lock-closed-outline"
+          slot="start"
+          color="medium"
+        ></ion-icon>
+        <ion-input
+          type="password"
+          [(ngModel)]="credentials.password"
+          placeholder="Create Password"
+        >
+        </ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        (click)="onSignup()"
+        shape="round"
+        class="login-button"
+      >
+        Create Account
+      </ion-button>
+
+      <div class="ion-text-center ion-margin-top">
+        <p (click)="goToLogin()" class="signup-text">
+          Already have an account? <span>Sign In</span>
+        </p>
+      </div>
+    </div>
   </div>
 </ion-content>
