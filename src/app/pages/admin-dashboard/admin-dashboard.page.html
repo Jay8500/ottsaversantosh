@@ -25,7 +25,11 @@
     <p>Manage active Indian OTT rates</p>
     <ion-note>Total Users: {{ userCount$ | async }}</ion-note>
   </div>
-  <ion-list lines="none" class="ion-no-padding">
+  <ion-list
+    lines="none"
+    class="ion-padding-top ion-padding-bottom"
+    style="background: transparent"
+  >
     @for (p of (products$ | async); track p.id) {
     <ion-item-sliding>
       <ion-item class="product-item">

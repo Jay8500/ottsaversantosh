@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, runInInjectionContext, EnvironmentInjector } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  runInInjectionContext,
+  EnvironmentInjector,
+} from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Auth, authState } from '@angular/fire/auth';
 import { take } from 'rxjs/operators';
@@ -40,19 +46,20 @@ export class AppComponent implements OnInit {
           if (user) {
             // Get the role we saved in storage during LoginPage
             const { value: role } = await Preferences.get({ key: 'user_role' });
-            
+
             // Assign the correct path based on role
-            targetPath = (role === 'admin') ? '/admin-dashboard' : '/tabs/tab1';
+            targetPath = role === 'admin' ? '/admin-dashboard' : '/tabs/tab1';
           }
 
           // 3. Navigate and Hide Splash
           await this.router.navigateByUrl(targetPath, { replaceUrl: true });
-          
-          try {
-            await SplashScreen.hide();
-          } catch (e) {
-            // console.log('Splash hidden');
-          }
+          setTimeout(async () => {
+            try {
+              await SplashScreen.hide();
+            } catch (e) {
+              // console.log('Splash hidden');
+            }
+          }, 800);
         });
     });
   }
